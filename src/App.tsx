@@ -3,7 +3,7 @@ import styles from './App.module.css';
 export const App = () => {
   return (
     <>
-      <h1 className={styles.title}>Weather App</h1>ç
+      <h1 className={styles.title}>Weather App</h1>
 
       <div className={styles.container}>
         <p>1</p>
