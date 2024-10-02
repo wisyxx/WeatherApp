@@ -4,7 +4,11 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import type { SearchType } from '../../types';
 import { Alert } from '../alert/Alert';
 
-export const Form = () => {
+type FormProps = {
+  fetchWeather: () => void;
+};
+
+export const Form = ({ fetchWeather }: FormProps) => {
   const [search, setSearch] = useState<SearchType>({
     city: '',
     country: '',
@@ -27,6 +31,9 @@ export const Form = () => {
       setAlert('You must fill all fields');
       return;
     }
+
+    // After passing validation...
+    fetchWeather();
   };
 
   return (
