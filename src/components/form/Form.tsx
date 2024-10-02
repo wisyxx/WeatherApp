@@ -1,13 +1,15 @@
 import styles from './Form.module.css';
 import { countries } from '../../data/countries';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import type { SearchType } from '../../types';
+import { Alert } from '../alert/Alert';
 
 export const Form = () => {
   const [search, setSearch] = useState<SearchType>({
     city: '',
     country: '',
   });
+  const [alert, setAlert] = useState('');
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
@@ -18,8 +20,20 @@ export const Form = () => {
     });
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (Object.values(search).includes('')) {
+      setAlert('You must fill all fields');
+      return;
+    }
+  };
+
   return (
-    <form className={styles.form}>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      {/* Alert messages */}
+      {alert && <Alert>{alert}</Alert>}
+
       <div className={styles.field}>
         <label htmlFor="city">City: </label>
         <input
@@ -39,14 +53,13 @@ export const Form = () => {
           name="country"
           id="country"
         >
-          <option value="" selected disabled>
-            Select country 🌍
-          </option>
+          <option value="Select country">Select country 🌍</option>
           {countries.map((country) => (
             <option
               className={styles.option}
               id={country.code}
               value={country.code}
+              key={country.code}
             >
               {country.name}
             </option>

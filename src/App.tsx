@@ -8,7 +8,6 @@ export const App = () => {
 
       <div className={styles.container}>
         <Form />
-        <p>2</p>
       </div>
     </>
   );
