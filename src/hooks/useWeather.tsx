@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { SearchType } from '../types';
 import { object, string, number, InferOutput, parse } from 'valibot';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 // type guard using Valibot (https://valibot.dev/)
 const WeatherSchema = object({
@@ -12,7 +12,7 @@ const WeatherSchema = object({
     temp_min: number(),
   }),
 });
-type Weather = InferOutput<typeof WeatherSchema>;
+export type Weather = InferOutput<typeof WeatherSchema>;
 
 export const useWeather = () => {
   const [weather, setWeather] = useState({
@@ -23,6 +23,8 @@ export const useWeather = () => {
       temp_min: 0,
     },
   });
+
+  const hasWeatherData = useMemo(() => weather.name, [weather]);
 
   const fetchWeather = async (search: SearchType) => {
     const { city, country } = search;
@@ -46,5 +48,9 @@ export const useWeather = () => {
     }
   };
 
-  return { fetchWeather, weather };
+  return {
+    fetchWeather,
+    weather,
+    hasWeatherData,
+  };
 };
