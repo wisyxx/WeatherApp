@@ -1,0 +1,28 @@
+.container {
+  background-color: var(--white);
+  color: #000;
+  border-radius: 1rem;
+  text-align: center;
+  padding: 2rem;
+}
+.weather_title {
+  margin: 0;
+  font-size: 3.5rem;
+  span {
+    font-weight: normal;
+  }
+}
+.current_temperature {
+  font-size: 5rem;
+  font-weight: 900;
+  margin: 1rem 0 0 0;
+}
+.current_minmax {
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-weight: bold;
+  }
+}
