@@ -3,14 +3,14 @@ import { Form } from './components/form/Form';
 import { useWeather } from './hooks/useWeather';
 
 export const App = () => {
-  const fetchWeather = useWeather();
+  const { weather, fetchWeather } = useWeather();
 
   return (
     <>
       <h1 className={styles.title}>Weather App</h1>
 
       <div className={styles.container}>
-        <Form fetchWeather={fetchWeather}/>
+        <Form fetchWeather={fetchWeather} />
       </div>
     </>
   );
