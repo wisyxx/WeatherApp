@@ -14,15 +14,18 @@ const WeatherSchema = object({
 });
 export type Weather = InferOutput<typeof WeatherSchema>;
 
+const initialState = {
+  name: '',
+  main: {
+    temp: 0,
+    temp_max: 0,
+    temp_min: 0,
+  },
+};
+
 export const useWeather = () => {
-  const [weather, setWeather] = useState({
-    name: '',
-    main: {
-      temp: 0,
-      temp_max: 0,
-      temp_min: 0,
-    },
-  });
+  const [weather, setWeather] = useState(initialState);
+  const [loading, setLoading] = useState(false);
 
   const hasWeatherData = useMemo(() => weather.name, [weather]);
 
@@ -32,6 +35,8 @@ export const useWeather = () => {
 
     try {
       // Coordinates
+      setLoading(true);
+      setWeather(initialState);
       const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city},${country}&appid=${apiKey}`;
       const { data: cityData } = await axios(geoUrl);
       const lat = cityData[0].lat;
@@ -45,6 +50,8 @@ export const useWeather = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,5 +59,6 @@ export const useWeather = () => {
     fetchWeather,
     weather,
     hasWeatherData,
+    loading,
   };
 };
