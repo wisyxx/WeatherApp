@@ -26,6 +26,7 @@ const initialState = {
 export const useWeather = () => {
   const [weather, setWeather] = useState(initialState);
   const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const hasWeatherData = useMemo(() => weather.name, [weather]);
 
@@ -34,17 +35,26 @@ export const useWeather = () => {
     const apiKey = import.meta.env.VITE_API_KEY;
 
     try {
-      // Coordinates
       setLoading(true);
       setWeather(initialState);
+      setNotFound(false);
+
+      // coordinates fetching
       const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city},${country}&appid=${apiKey}`;
       const { data: cityData } = await axios(geoUrl);
+
+      if (!cityData[0]) {
+        setNotFound(true);
+      }
+
       const lat = cityData[0].lat;
       const lon = cityData[0].lon;
 
+      // weather fetching
       const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
       const { data: weatherData } = await axios(weatherUrl);
-      const result = parse(WeatherSchema, weatherData); // if doesn't match the schema it throws and error automatically
+      const result = parse(WeatherSchema, weatherData); // if it doesn't match the schema it throws and error automatically
+
       if (result) {
         setWeather(result);
       }
@@ -60,5 +70,6 @@ export const useWeather = () => {
     weather,
     hasWeatherData,
     loading,
+    notFound,
   };
 };
